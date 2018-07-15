@@ -18,13 +18,13 @@ app.get('/vacancies/', (req, res) => {
     let page;
     let pageSkips;
     let queryToDatabase = {};
-    queryToDatabase.salary = {};
 
 
     page = req.query.page || 1;
 
     pageSkips = (page - 1) * 10;
     if (req.query.salary === 'true') {
+        queryToDatabase.salary = {};
         queryToDatabase = {'salary.currency': {$ne: null}};
 
     }
