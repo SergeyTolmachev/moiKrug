@@ -21,8 +21,7 @@ if (cluster.isMaster) {
     for (let i = 0; i < numCPUs; ++i) {
         cluster.fork();
     }
-}
-else {
+} else {
     const app = express();
 
     app.use(bodyParser.urlencoded({extended: true}));
@@ -43,10 +42,6 @@ else {
             queryToDatabase.salary = {};
             queryToDatabase = {'salary.currency': {$ne: null}};
 
-        }
-
-        if (req.query.remote === 'false') {
-            queryToDatabase.remote = false;
         }
 
         if (req.query.remote === 'true') {
@@ -85,9 +80,19 @@ else {
         if (req.params['vacancy_id']) {
             vacancyId = req.params['vacancy_id'];
             vacanciesModel.findOne({lastId: vacancyId}, function (err, vacancy) {
-                if (err) return console.error(err);
-                res.status(200).json(vacancy);
+                if (err) {
+                    res.status(404).send('Страница вакансии не найдена');
+                    return console.error(err);
+                }
+                if (vacancy === null){
+                    res.status(404).send('Страница вакансии не найдена');
+
+                } else {
+                    res.status(200).json(vacancy);
+                }
             });
+        } else {
+            res.status(404).send('Страница вакансии не найдена');
         }
     });
 
