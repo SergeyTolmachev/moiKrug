@@ -3,9 +3,6 @@ const cluster = require('cluster');
 const db = require('./config/mongodbConnect');
 const express = require('express');
 const bodyParser = require('body-parser');
-let mongoose = require('mongoose');
-const vacanciesSchema = require('./schemas/vacanciesSchema');
-let vacanciesModel = mongoose.model('vacanciesModel', vacanciesSchema.vacanciesSchema);
 const vacancyModel = require('./models/Vacancy');
 
 if (cluster.isMaster) {
