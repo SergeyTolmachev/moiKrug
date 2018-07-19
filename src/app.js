@@ -6,8 +6,7 @@ const bodyParser = require('body-parser');
 let mongoose = require('mongoose');
 const vacanciesSchema = require('./schemas/vacanciesSchema');
 let vacanciesModel = mongoose.model('vacanciesModel', vacanciesSchema.vacanciesSchema);
-const getData = require('./utils/getData');
-const getVacancy = require('./utils/getVacancy');
+const vacancyModel = require('./models/Vacancy');
 
 if (cluster.isMaster) {
     cluster.on('disconnect', (worker, code, signal) => {
@@ -30,14 +29,14 @@ if (cluster.isMaster) {
 
 
     app.get('/vacancies/', async (req, res) => {
-        let vacancies = await getData(req);
+        let vacancies = await vacancyModel.getData(req);
         console.log(vacancies);
         res.status(200).json(vacancies);
     });
 
 
     app.get('/vacancies/:vacancy_id', async (req, res) => {
-        let vacancy = await getVacancy(req);
+        let vacancy = await vacancyModel.getVacancy(req);
         console.log(vacancy);
         if (vacancy){
             res.status(200).json(vacancy);
